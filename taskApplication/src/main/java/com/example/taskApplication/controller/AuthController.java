@@ -29,8 +29,6 @@ public class AuthController {
             return "redirect:/signup?error=usernameTaken";
         }
 
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
 
         userService.saveUser(user);
 

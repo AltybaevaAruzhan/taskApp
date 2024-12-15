@@ -12,7 +12,7 @@ public class TaskApplication {
 		SpringApplication.run(TaskApplication.class, args);
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-		String rawPassword = "aruka";
+		String rawPassword = "e";
 
 		// Hash the password
 		String firstHash = "$2a$10$lC.5ABMINrXF.yj4oeqPde1kTE/TDnlNoik0WZ7FDzvU6QoVGu3SO";

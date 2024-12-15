@@ -62,7 +62,7 @@ public class TaskController {
         User user = getCurrentUser();
         Task task = taskRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Task Id: " + id));
         model.addAttribute("task", task);
-        return "details"; // Ensure the template file is named "detail.html"
+        return "details";
     }
 
 
@@ -123,7 +123,6 @@ public class TaskController {
     }
 
 
-    // Display tasks filtered by status
     @GetMapping("/filter/status")
     public String getTasksByStatus(@RequestParam String status, Model model) {
         List<Task> tasks = taskService.getTasksByStatus(status);
@@ -131,7 +130,6 @@ public class TaskController {
         return "list";
     }
 
-    // Display tasks filtered by category
     @GetMapping("/filter/category")
     public String getTasksByCategory(@RequestParam Long categoryId, Model model) {
         List<Task> tasks = taskService.getTasksByCategory(categoryId);
@@ -139,7 +137,6 @@ public class TaskController {
         return "list";
     }
 
-    // Combined filtering by status and category
     @GetMapping("/filter")
     public String getTasksByFilters(
             @RequestParam(required = false) String status,
@@ -147,27 +144,21 @@ public class TaskController {
             Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Logic to handle filtering
         List<Task> tasks;
         if ((status == null || status.isEmpty()) && categoryId == null) {
-            // Return all tasks if no filters are applied
             tasks = taskRepository.findByUserUsername(username);
         } else if (status == null || status.isEmpty()) {
-            // Filter by category only
             tasks = taskRepository.findByUserUsernameAndCategoryId(username, categoryId);
         } else if (categoryId == null) {
-            // Filter by status only
             tasks = taskRepository.findByUserUsernameAndStatus(username, status);
         } else {
-            // Filter by both status and category
             tasks = taskRepository.findByUserUsernameAndStatusAndCategoryId(username, status, categoryId);
         }
 
-        // Add data to the model
         model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("status", status); // Preserve selected filters
-        model.addAttribute("categoryId", categoryId); // Preserve selected filters
+        model.addAttribute("status", status);
+        model.addAttribute("categoryId", categoryId);
         return "list";
     }
 }
